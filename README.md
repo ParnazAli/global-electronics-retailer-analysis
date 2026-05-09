@@ -59,7 +59,7 @@ Each section provides focused insights to support business understanding and dec
 ![Sales](https://raw.githubusercontent.com/ParnazAli/global-electronics-retailer-analysis/refs/heads/main/Sales_Performance.jpg)
 
 ### 📦 Product Performance
-![Product]()
+![Product](https://raw.githubusercontent.com/ParnazAli/global-electronics-retailer-analysis/refs/heads/main/Product_Performance.jpg)
 
 ### 🌍 Geographic Performance
 ![Geographic](https://raw.githubusercontent.com/ParnazAli/global-electronics-retailer-analysis/refs/heads/main/Geographic_Performance.jpg)
