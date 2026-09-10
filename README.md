@@ -12,23 +12,39 @@ Rather than a single dashboard of metrics, each module follows the same discipli
 - **A ~37-day zero-order gap recurs every year (2016–2020)** — a data-collection artifact, not real seasonality. Flagged and excluded from trend interpretation. (Module 1)
 - **The 2020 revenue decline is real** and does not recover by the end of the dataset (Feb 2021), consistent with COVID-19's impact on in-store retail. (Module 1)
 - **US stores are ~2.8x more revenue-productive per square meter than Australian stores** — a much more useful lens than raw country revenue rankings. (Module 2)
-- **9 of 66 physical stores (14%) show zero recorded sales** across the entire 5-year window despite opening years ago — flagged as a data-quality issue. (Module 2)
+- **9 of 66 physical stores (14%) show zero recorded sales** across the entire 5-year window despite opening years ago — flagged as a data-quality issue, and independently confirmed via SQL. (Module 2)
 - **Games and Toys is the only category weak on both revenue and margin.** Home Appliances began declining in 2019, *before* COVID — a category-specific problem, not a pandemic effect. (Module 3)
 - **The top 10% of customers generate 36% of revenue**, while age and gender show almost no relationship to customer value — behavioral segmentation beats demographic segmentation here. (Module 4)
+
+## SQL layer
+
+Every major metric in this project is also implemented in pure SQL against a SQLite database built from the same raw CSVs:
+
+- `src/build_database.py` — loads the 5 CSVs into `data/global_electronics.db`
+- `sql/queries.sql` — one `sales_fact` view plus ~15 annotated queries (JOINs, window functions, CTEs) reproducing every module's key metrics
+- `notebooks/00_sql_validation.ipynb` — runs both the pandas pipeline and the SQL queries side by side and asserts they match exactly (they do)
+
+This means the analysis can be reproduced or audited from either the Python or the SQL side independently.
 
 ## Repository structure
 
 ```
-├── data/raw/               Original CSV extracts (Sales, Customers, Products, Stores, Exchange Rates)
+├── data/
+│   ├── raw/                Original CSV extracts (Sales, Customers, Products, Stores, Exchange Rates)
+│   └── global_electronics.db   SQLite database built from the raw CSVs
+├── sql/
+│   └── queries.sql         Pure-SQL version of every module's key metrics
 ├── notebooks/
+│   ├── 00_sql_validation.ipynb
 │   ├── 01_sales_performance.ipynb
 │   ├── 02_geographic_performance.ipynb
 │   ├── 03_product_performance.ipynb
 │   └── 04_customer_segmentation.ipynb
 ├── src/
-│   ├── data_prep.py        Shared data loading, cleaning, and the fact-table builder
-│   └── viz_style.py        Shared chart styling (colors, fonts, formatters)
-├── reports/figures/        Exported PNG charts used in each notebook
+│   ├── data_prep.py         Shared data loading, cleaning, and the fact-table builder
+│   ├── build_database.py    Builds the SQLite database from the raw CSVs
+│   └── viz_style.py         Shared chart styling (colors, fonts, formatters)
+├── reports/figures/         Exported PNG charts used in each notebook
 └── requirements.txt
 ```
 
@@ -49,4 +65,4 @@ Each notebook is self-contained and can be run independently; all four import sh
 
 ## Tech stack
 
-Python · pandas · matplotlib · seaborn · Jupyter
+Python · pandas · matplotlib · seaborn · Jupyter · SQL (SQLite)
