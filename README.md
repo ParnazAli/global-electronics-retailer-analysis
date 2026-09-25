@@ -16,6 +16,14 @@ Rather than a single dashboard of metrics, each module follows the same discipli
 - **Games and Toys is the only category weak on both revenue and margin.** Home Appliances began declining in 2019, *before* COVID — a category-specific problem, not a pandemic effect. (Module 3)
 - **The top 10% of customers generate 36% of revenue**, while age and gender show almost no relationship to customer value — behavioral segmentation beats demographic segmentation here. (Module 4)
 
+## Additional Dashboard Visuals
+
+![G1](https://raw.githubusercontent.com/ParnazAli/global-electronics-retailer-analysis/refs/heads/main/reports/figures/G1.png)
+
+![G2](https://raw.githubusercontent.com/ParnazAli/global-electronics-retailer-analysis/refs/heads/main/reports/figures/G2.png)
+
+![G3](https://raw.githubusercontent.com/ParnazAli/global-electronics-retailer-analysis/refs/heads/main/reports/figures/G3.png)
+
 ## SQL layer
 
 Every major metric in this project is also implemented in pure SQL against a SQLite database built from the same raw CSVs:
