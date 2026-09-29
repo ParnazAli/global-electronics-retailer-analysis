@@ -1,15 +1,15 @@
-# Global Electronics Retailer — End-to-End Sales & Business Analysis
+# Global Electronics Retailer: Sales & Business Analysis
 
-A four-part data analysis of a global electronics retailer's 2016–2021 sales history, covering **Sales Performance**, **Geographic Performance**, **Product Performance**, and **Customer Segmentation**. Originally built as a Power BI dashboard set; rebuilt here as a reproducible Python analysis with an emphasis on data-quality rigor — every module surfaces at least one non-obvious, verified finding rather than just restating totals.
+I analyzed the 2016–2021 sales history of a global electronics retailer in four parts: sales performance, geographic performance, product performance, and customer segmentation. I first built it as a set of Power BI dashboards, then rebuilt it in Python so anyone can rerun it. I spent a lot of the time checking the data itself, so each part ends with something I verified against the raw data, not just a list of totals.
 
 ## Highlight findings
 
-- **A ~37-day zero-order gap recurs every year (2016–2020)** — a data-collection artifact, not real seasonality. Flagged and excluded from trend interpretation. (Module 1)
-- **The 2020 revenue decline is real** and does not recover by the end of the dataset (Feb 2021), consistent with COVID-19's impact on in-store retail. (Module 1)
-- **US stores are ~2.8x more revenue-productive per square meter than Australian stores** — a much more useful lens than raw country revenue rankings. (Module 2)
-- **9 of 66 physical stores (14%) show zero recorded sales** across the entire 5-year window despite opening years ago — flagged as a data-quality issue, and independently confirmed via SQL. (Module 2)
-- **Games and Toys is the only category weak on both revenue and margin.** Home Appliances began declining in 2019, *before* COVID — a category-specific problem, not a pandemic effect. (Module 3)
-- **The top 10% of customers generate 36% of revenue**, while age and gender show almost no relationship to customer value — behavioral segmentation beats demographic segmentation here. (Module 4)
+- Every year from 2016 to 2020 there is a gap of about 37 days with zero orders. It looks like a data collection problem, not real seasonality, so I left it out when reading trends. (Module 1)
+- The 2020 revenue drop is real. It doesn't recover before the data ends in Feb 2021, which fits what COVID did to in-store retail. (Module 1)
+- US stores make about 2.8x more revenue per square meter than Australian stores. This says more than ranking countries by total revenue. (Module 2)
+- 9 of the 66 physical stores (14%) have no recorded sales at all across the 5 years, even though they opened years ago. I treated this as a data quality issue and confirmed it in SQL. (Module 2)
+- Games and Toys is the only category that is weak on both revenue and margin. Home Appliances started declining in 2019, before COVID, so that one is a category problem and not a pandemic effect. (Module 3)
+- The top 10% of customers bring in 36% of revenue. Age and gender barely relate to customer value, so behavior-based segments work better than demographic ones here. (Module 4)
 
 ## Dashboard Previews
 
@@ -20,32 +20,31 @@ A four-part data analysis of a global electronics retailer's 2016–2021 sales h
     <td width="33%"><img src="https://raw.githubusercontent.com/ParnazAli/global-electronics-retailer-analysis/refs/heads/main/reports/figures/G3.png" alt="Dashboard 3"></td>
   </tr>
   <tr>
-    <td align="center"><b>Dashboard 1</b></td>
-    <td align="center"><b>Dashboard 2</b></td>
-    <td align="center"><b>Dashboard 3</b></td>
+    <td align="center">Dashboard 1</td>
+    <td align="center">Dashboard 2</td>
+    <td align="center">Dashboard 3</td>
   </tr>
 </table>
 
 ## Data & revenue methodology
 
-Data: [Global Electronics Retailer](https://mavenanalytics.io/data-playground/global-electronics-retailer) (Maven Analytics) — 5 relational CSVs (Sales, Customers, Products, Stores, Exchange Rates).
+The data is the [Global Electronics Retailer](https://mavenanalytics.io/data-playground/global-electronics-retailer) dataset from Maven Analytics: 5 related CSVs (Sales, Customers, Products, Stores, Exchange Rates).
 
-**Revenue is computed as `Quantity × Unit Price USD`** using the retailer's USD list price from `Products.csv`. The `Currency Code` field on each order records only which currency the transaction was locally settled in — it is not a signal that the USD figures need further conversion. This was verified by reproducing the original dashboards' totals exactly before doing any further analysis. The `Exchange_Rates` table is used only where explicitly noted, to restate USD figures in local currency for regional reporting.
+Revenue is `Quantity × Unit Price USD`, using the USD list price from `Products.csv`. The `Currency Code` on an order only tells you which currency the sale was settled in, so the USD figures don't need to be converted again. I checked this by reproducing the totals from my original dashboards exactly before going further. I only use the `Exchange_Rates` table where I say so, to show USD figures in local currency for regional reporting.
 
 ## Approach
 
-Rather than a single dashboard of metrics, each module follows the same discipline:
-**Research Question → Methodology → Findings → Business Conclusions.** Findings are only reported after being checked against the raw data (e.g., a recurring "seasonal dip" turned out to be a data-export bug once the daily order counts were inspected — see Module 1).
+Each module follows the same steps: research question, method, findings, business conclusions. I only report a finding after checking it against the raw data. For example, what looked like a yearly seasonal dip turned out to be an export bug once I looked at the daily order counts (see Module 1).
 
 ## SQL layer
 
-Every major metric in this project is also implemented in pure SQL against a SQLite database built from the same raw CSVs:
+I also rebuilt every major metric in plain SQL, on a SQLite database made from the same raw CSVs:
 
-- `src/build_database.py` — loads the 5 CSVs into `data/global_electronics.db`
-- `sql/queries.sql` — one `sales_fact` view plus ~15 annotated queries (JOINs, window functions, CTEs) reproducing every module's key metrics
-- `notebooks/00_sql_validation.ipynb` — runs both the pandas pipeline and the SQL queries side by side and asserts they match exactly (they do)
+- `src/build_database.py` loads the 5 CSVs into `data/global_electronics.db`
+- `sql/queries.sql` has one `sales_fact` view and about 15 commented queries (JOINs, window functions, CTEs) that reproduce each module's key metrics
+- `notebooks/00_sql_validation.ipynb` runs the pandas pipeline and the SQL queries side by side and checks that the results match exactly (they do)
 
-This means the analysis can be reproduced or audited from either the Python or the SQL side independently.
+So the analysis can be reproduced or audited from either the Python side or the SQL side.
 
 ## Repository structure
 
@@ -76,7 +75,7 @@ pip install -r requirements.txt
 jupyter notebook notebooks/01_sales_performance.ipynb
 ```
 
-Each notebook is self-contained and can be run independently; all four import shared logic from `src/`.
+Each notebook runs on its own, and all four import shared code from `src/`.
 
 ## Tech stack
 
@@ -84,6 +83,6 @@ Python · pandas · matplotlib · seaborn · Jupyter · SQL (SQLite)
 
 ## Author
 
-**Parnaz Ali** — Data Analyst & BI Specialist, author of this project
+Hi, I'm Parnaz Ali, a data analyst and BI specialist. I did this project from start to finish. If you have questions or want to talk about it, send me an email.
 
 [![Email](https://img.shields.io/badge/Email-parnazali1383%40gmail.com-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:parnazali1383@gmail.com)
