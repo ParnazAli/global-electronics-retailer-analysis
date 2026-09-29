@@ -2,11 +2,6 @@
 
 A four-part data analysis of a global electronics retailer's 2016–2021 sales history, covering **Sales Performance**, **Geographic Performance**, **Product Performance**, and **Customer Segmentation**. Originally built as a Power BI dashboard set; rebuilt here as a reproducible Python analysis with an emphasis on data-quality rigor — every module surfaces at least one non-obvious, verified finding rather than just restating totals.
 
-## Why this project is structured the way it is
-
-Rather than a single dashboard of metrics, each module follows the same discipline:
-**Research Question → Methodology → Findings → Business Conclusions.** Findings are only reported after being checked against the raw data (e.g., a recurring "seasonal dip" turned out to be a data-export bug once the daily order counts were inspected — see Module 1).
-
 ## Highlight findings
 
 - **A ~37-day zero-order gap recurs every year (2016–2020)** — a data-collection artifact, not real seasonality. Flagged and excluded from trend interpretation. (Module 1)
@@ -16,13 +11,31 @@ Rather than a single dashboard of metrics, each module follows the same discipli
 - **Games and Toys is the only category weak on both revenue and margin.** Home Appliances began declining in 2019, *before* COVID — a category-specific problem, not a pandemic effect. (Module 3)
 - **The top 10% of customers generate 36% of revenue**, while age and gender show almost no relationship to customer value — behavioral segmentation beats demographic segmentation here. (Module 4)
 
-## Additional Dashboard Visuals
+## Dashboard Previews
 
-![G1](https://raw.githubusercontent.com/ParnazAli/global-electronics-retailer-analysis/refs/heads/main/reports/figures/G1.png)
+<table>
+  <tr>
+    <td width="33%"><img src="https://raw.githubusercontent.com/ParnazAli/global-electronics-retailer-analysis/refs/heads/main/reports/figures/G1.png" alt="Dashboard 1"></td>
+    <td width="33%"><img src="https://raw.githubusercontent.com/ParnazAli/global-electronics-retailer-analysis/refs/heads/main/reports/figures/G2.png" alt="Dashboard 2"></td>
+    <td width="33%"><img src="https://raw.githubusercontent.com/ParnazAli/global-electronics-retailer-analysis/refs/heads/main/reports/figures/G3.png" alt="Dashboard 3"></td>
+  </tr>
+  <tr>
+    <td align="center"><b>Dashboard 1</b></td>
+    <td align="center"><b>Dashboard 2</b></td>
+    <td align="center"><b>Dashboard 3</b></td>
+  </tr>
+</table>
 
-![G2](https://raw.githubusercontent.com/ParnazAli/global-electronics-retailer-analysis/refs/heads/main/reports/figures/G2.png)
+## Data & revenue methodology
 
-![G3](https://raw.githubusercontent.com/ParnazAli/global-electronics-retailer-analysis/refs/heads/main/reports/figures/G3.png)
+Data: [Global Electronics Retailer](https://mavenanalytics.io/data-playground/global-electronics-retailer) (Maven Analytics) — 5 relational CSVs (Sales, Customers, Products, Stores, Exchange Rates).
+
+**Revenue is computed as `Quantity × Unit Price USD`** using the retailer's USD list price from `Products.csv`. The `Currency Code` field on each order records only which currency the transaction was locally settled in — it is not a signal that the USD figures need further conversion. This was verified by reproducing the original dashboards' totals exactly before doing any further analysis. The `Exchange_Rates` table is used only where explicitly noted, to restate USD figures in local currency for regional reporting.
+
+## Approach
+
+Rather than a single dashboard of metrics, each module follows the same discipline:
+**Research Question → Methodology → Findings → Business Conclusions.** Findings are only reported after being checked against the raw data (e.g., a recurring "seasonal dip" turned out to be a data-export bug once the daily order counts were inspected — see Module 1).
 
 ## SQL layer
 
@@ -55,12 +68,6 @@ This means the analysis can be reproduced or audited from either the Python or t
 ├── reports/figures/         Exported PNG charts used in each notebook
 └── requirements.txt
 ```
-
-## Data & revenue methodology
-
-Data: [Global Electronics Retailer](https://mavenanalytics.io/data-playground/global-electronics-retailer) (Maven Analytics) — 5 relational CSVs (Sales, Customers, Products, Stores, Exchange Rates).
-
-**Revenue is computed as `Quantity × Unit Price USD`** using the retailer's USD list price from `Products.csv`. The `Currency Code` field on each order records only which currency the transaction was locally settled in — it is not a signal that the USD figures need further conversion. This was verified by reproducing the original dashboards' totals exactly before doing any further analysis. The `Exchange_Rates` table is used only where explicitly noted, to restate USD figures in local currency for regional reporting.
 
 ## How to run
 
