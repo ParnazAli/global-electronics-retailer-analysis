@@ -81,3 +81,9 @@ Each notebook is self-contained and can be run independently; all four import sh
 ## Tech stack
 
 Python · pandas · matplotlib · seaborn · Jupyter · SQL (SQLite)
+
+## Author
+
+**Parnaz Ali** — Data Analyst & BI Specialist, author of this project
+
+[![Email](https://img.shields.io/badge/Email-parnazali1383%40gmail.com-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:parnazali1383@gmail.com)
